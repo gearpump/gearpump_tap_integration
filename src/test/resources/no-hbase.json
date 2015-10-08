@@ -1,0 +1,101 @@
+{
+  "VCAP_SERVICES": {
+    "elk": [
+      {
+        "credentials": {
+          "hostname": "10.10.10.11",
+          "port": "33443",
+          "ports": {
+            "80/tcp": "33443"
+          }
+        },
+        "label": "elk",
+        "name": "elk-kalor",
+        "plan": "free",
+        "tags": [
+          "elk",
+          "elasticsearch",
+          "logstash",
+          "kibana"
+        ]
+      }
+    ],
+    "hdfs": [
+      {
+        "credentials": {
+          "HADOOP_CONFIG_KEY": {
+            "dfs.block.access.token.enable": "true",
+            "dfs.blocksize": "134217728",
+            "dfs.client.domain.socket.data.traffic": "false",
+            "dfs.client.failover.proxy.provider.nameservice1": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+            "dfs.client.read.shortcircuit": "false",
+            "dfs.client.read.shortcircuit.skip.checksum": "false",
+            "dfs.client.use.datanode.hostname": "false",
+            "dfs.datanode.hdfs-blocks-metadata.enabled": "true",
+            "dfs.datanode.kerberos.principal": "hdfs/_HOST@CLOUDERA",
+            "dfs.domain.socket.path": "/var/run/hdfs-sockets/dn",
+            "dfs.encryption.key.provider.uri": "kms://http@cdh-master-0.node.server.com:16000/kms",
+            "dfs.ha.automatic-failover.enabled.nameservice1": "true",
+            "dfs.ha.namenodes.nameservice1": "namenode14,namenode15",
+            "dfs.namenode.acls.enabled": "false",
+            "dfs.namenode.http-address.nameservice1.namenode14": "cdh-master-0.node.server.com:50070",
+            "dfs.namenode.http-address.nameservice1.namenode15": "cdh-master-1.node.server.com:50070",
+            "dfs.namenode.https-address.nameservice1.namenode14": "cdh-master-0.node.server.com:50470",
+            "dfs.namenode.https-address.nameservice1.namenode15": "cdh-master-1.node.server.com:50470",
+            "dfs.namenode.kerberos.internal.spnego.principal": "HTTP/_HOST@CLOUDERA",
+            "dfs.namenode.kerberos.principal": "hdfs/_HOST@CLOUDERA",
+            "dfs.namenode.rpc-address.nameservice1.namenode14": "cdh-master-0.node.server.com:8020",
+            "dfs.namenode.rpc-address.nameservice1.namenode15": "cdh-master-1.node.server.com:8020",
+            "dfs.namenode.servicerpc-address.nameservice1.namenode14": "cdh-master-0.node.server.com:8022",
+            "dfs.namenode.servicerpc-address.nameservice1.namenode15": "cdh-master-1.node.server.com:8022",
+            "dfs.nameservices": "nameservice1",
+            "dfs.replication": "2",
+            "fs.defaultFS": "hdfs://nameservice1",
+            "fs.permissions.umask-mode": "022",
+            "ha.zookeeper.quorum": "cdh-master-0.node.server.com:2181,cdh-master-1.node.server.com:2181,cdh-master-2.node.server.com:2181",
+            "hadoop.proxyuser.HTTP.groups": "*",
+            "hadoop.proxyuser.HTTP.hosts": "*",
+            "hadoop.proxyuser.flume.groups": "*",
+            "hadoop.proxyuser.flume.hosts": "*",
+            "hadoop.proxyuser.hdfs.groups": "*",
+            "hadoop.proxyuser.hdfs.hosts": "*",
+            "hadoop.proxyuser.hive.groups": "*",
+            "hadoop.proxyuser.hive.hosts": "*",
+            "hadoop.proxyuser.httpfs.groups": "*",
+            "hadoop.proxyuser.httpfs.hosts": "*",
+            "hadoop.proxyuser.hue.groups": "*",
+            "hadoop.proxyuser.hue.hosts": "*",
+            "hadoop.proxyuser.mapred.groups": "*",
+            "hadoop.proxyuser.mapred.hosts": "*",
+            "hadoop.proxyuser.oozie.groups": "*",
+            "hadoop.proxyuser.oozie.hosts": "*",
+            "hadoop.proxyuser.yarn.groups": "*",
+            "hadoop.proxyuser.yarn.hosts": "*",
+            "hadoop.rpc.protection": "authentication",
+            "hadoop.security.auth_to_local": "DEFAULT",
+            "hadoop.security.authentication": "kerberos",
+            "hadoop.security.authorization": "true",
+            "hadoop.security.group.mapping": "org.apache.hadoop.security.ShellBasedUnixGroupsMapping",
+            "hadoop.security.instrumentation.requires.admin": "false",
+            "hadoop.security.key.provider.path": "kms://http@cdh-master-0.node.server.com:16000/kms",
+            "hadoop.ssl.client.conf": "ssl-client.xml",
+            "hadoop.ssl.keystores.factory.class": "org.apache.hadoop.security.ssl.FileBasedKeyStoresFactory",
+            "hadoop.ssl.require.client.cert": "false",
+            "hadoop.ssl.server.conf": "ssl-server.xml",
+            "io.compression.codecs": "org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.BZip2Codec,org.apache.hadoop.io.compress.DeflateCodec,org.apache.hadoop.io.compress.SnappyCodec,org.apache.hadoop.io.compress.Lz4Codec"
+          },
+          "fs.defaultFS": "hdfs://nameservice1",
+          "kerberos": {
+            "kdc": "cdh-manager-0.node.server.com",
+            "krealm": "CLOUDERA"
+          },
+          "uri": "hdfs://nameservice1/org/intel/hdfsbroker/userspace/b2be9863-f73c-4fa8-8c26-89ab41352c37/"
+        },
+        "label": "hdfs",
+        "name": "hdfs-inst",
+        "plan": "shared",
+        "tags": []
+      }
+    ]
+  }
+}
