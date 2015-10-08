@@ -49,13 +49,6 @@ public class TapJsonConfig<T extends Map> implements TapConfig {
         return result;
     }
 
-    public String getHBaseNamespace(String instanceName) {
-        ArrayList<T> hbases = getServiceNodes(TAP_CONFIG_HBASE_TYPE);
-        T hbaseService = serviceNodeForInstance(hbases, instanceName);
-
-        return (String) ((Map) hbaseService.get(CREDENTIALS_KEY_VALUE)).get(TAP_CONFIG_NAMESPACE_KEY);
-    }
-
     private static <T extends Map> Configuration createConfiguration(T hbaseService) {
         Configuration result = null;
 
@@ -67,6 +60,14 @@ public class TapJsonConfig<T extends Map> implements TapConfig {
         }
 
         return result;
+    }
+
+    @Override
+    public String getHBaseNamespace(String instanceName) {
+        ArrayList<T> hbases = getServiceNodes(TAP_CONFIG_HBASE_TYPE);
+        T hbaseService = serviceNodeForInstance(hbases, instanceName);
+
+        return (String) ((Map) hbaseService.get(CREDENTIALS_KEY_VALUE)).get(TAP_CONFIG_NAMESPACE_KEY);
     }
 
     @Override

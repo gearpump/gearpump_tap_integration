@@ -46,7 +46,7 @@ import org.apache.hadoop.conf.Configuration;
  */
 public interface TapConfig {
     /**
-     * get a HBase configuration by hbase service instance id
+     * get a HBase configuration (Hadoop configuration object) by hbase service instance name
      *
      * @param serviceId HBase service instance Id
      * @return
@@ -60,4 +60,14 @@ public interface TapConfig {
      * @return
      */
     Configuration getHDFSConfig(String serviceId);
+
+    /**
+     * Get a namespace provisioned for given HBase service by TAP.
+     *
+     * @param serviceId HBase service instance Id
+     * @return
+     */
+    String getHBaseNamespace(String serviceId);
+
+
 }
