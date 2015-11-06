@@ -56,11 +56,43 @@ import org.apache.hadoop.conf.Configuration;
  *          },
  *          "name": "service instance name"
  *        }
- *      ]
+ *      ],
+ *      "kafka": [
+ *        {
+ *          "credentials": {
+ *            "uri": "10.10.10.201:9092,10.10.10.50:9092,10.10.10.210:9092"
+ *          },
+ *          "label": "kafka",
+ *          "name": "gearpump_kafka",
+ *          "plan": "shared",
+ *          "tags": [
+ *            "kafka",
+ *            "distributed",
+ *            "real-time",
+ *            "messaging"
+ *          ]
+ *        }
+ *      ],
+ *      "zookeeper": [
+ *        {
+ *          "credentials": {
+ *            "kerberos": {
+ *              "kdc": "",
+ *              "krealm": ""
+ *            },
+ *            "zk.cluster": "10.10.10.201:2181,10.10.10.50:2181,10.10.10.210:2181",
+ *            "zk.node": "/org/intel/zookeeperbroker/metadata/34ca13ec-18e4-4598-b2a2-c6ce981861b0"
+ *         },
+ *         "label": "zookeeper",
+ *         "name": "gearpump_zookeeper",
+ *         "plan": "shared",
+ *         "tags": []
+ *       }
+ *     ]
  *   }
  * }
  *
- * "hbase", "hdfs" keys represent srvice types. There can by many instances within given type.
+ * "hbase", "hdfs" keys represent service types. There can by many instances within given type.
  * The instances of the same type are distinguished by service name ("name" key)
  */
 public interface TapConfig {
@@ -79,6 +111,22 @@ public interface TapConfig {
      * @return
      */
     Configuration getHDFSConfig(String serviceId);
+
+    /**
+     * get a Kafka Configuration by kafka instance Id
+     *
+     * @param serviceId
+     * @return
+     */
+    Configuration getKafkaConfig(String serviceId);
+
+    /**
+     * get a Zookeeper Configuration by zookeeper instance Id
+     *
+     * @param serviceId
+     * @return
+     */
+    Configuration getZookeeperConfig(String serviceId);
 
     /**
      * Get a namespace provisioned for given HBase service by TAP.
