@@ -26,15 +26,23 @@ import org.apache.hadoop.conf.Configuration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TapJsonConfig<T extends Map> implements TapConfig {
 
     private static final String TAP_CONFIG_ROOT = "VCAP_SERVICES";
     private static final String TAP_CONFIG_HBASE_TYPE = "hbase";
+    private static final String TAP_CONFIG_HDFS_TYPE = "hdfs";
+    private static final String TAP_CONFIG_KAFKA_TYPE = "kafka";
+    private static final String TAP_CONFIG_ZOOKEEPER_TYPE = "zookeeper";
     private static final String TAP_CONFIG_INSTANCE_ID_KEY = "name";
     private static final String TAP_CONFIG_NAMESPACE_KEY = "hbase.namespace";
     private static final String HADOOP_CONFIG_KEY_VALUE = "HADOOP_CONFIG_KEY";
+    private static final String KAFKA_URI = "uri";
+    private static final String KAFKA_BROKERS = "brokers";
+    private static final String ZOOKEEPER_CLUSTER = "zk.cluster";
+    private static final String ZOOKEEPER_SERVERS = "zookeepers";
     private static final String CREDENTIALS_KEY_VALUE = "credentials";
 
     private final T tapConfig;
@@ -68,14 +76,37 @@ public class TapJsonConfig<T extends Map> implements TapConfig {
         return result;
     }
 
-    private static <T extends Map> Configuration createConfiguration(T hbaseService) {
+    private static <T extends Map> Configuration createConfiguration(T service, String type) {
         Configuration result = null;
 
-        if (hbaseService != null) {
-           result = new Configuration();
-            Map credentials = (Map) hbaseService.get(CREDENTIALS_KEY_VALUE);
-            Map<String, String> values = (Map<String, String>) credentials.get(TapJsonConfig.HADOOP_CONFIG_KEY_VALUE);
-            values.forEach(result::set);
+        if (service != null) {
+            result = new Configuration();
+            Map credentials;
+            Map<String, String> values;
+            switch(type) {
+                case TAP_CONFIG_HBASE_TYPE:
+                    credentials = (Map) service.get(CREDENTIALS_KEY_VALUE);
+                    values = (Map<String, String>) credentials.get(TapJsonConfig.HADOOP_CONFIG_KEY_VALUE);
+                    values.forEach(result::set);
+                    break;
+                case TAP_CONFIG_HDFS_TYPE:
+                    credentials = (Map) service.get(CREDENTIALS_KEY_VALUE);
+                    values = (Map<String, String>) credentials.get(TapJsonConfig.HADOOP_CONFIG_KEY_VALUE);
+                    values.forEach(result::set);
+                    break;
+                case TAP_CONFIG_KAFKA_TYPE:
+                    credentials = (Map) service.get(CREDENTIALS_KEY_VALUE);
+                    values = new HashMap<String, String>();
+                    values.put(TapJsonConfig.KAFKA_BROKERS, credentials.get(TapJsonConfig.KAFKA_URI).toString());
+                    values.forEach(result::set);
+                    break;
+                case TAP_CONFIG_ZOOKEEPER_TYPE:
+                    credentials = (Map) service.get(CREDENTIALS_KEY_VALUE);
+                    values = new HashMap<String, String>();
+                    values.put(TapJsonConfig.ZOOKEEPER_SERVERS, credentials.get(TapJsonConfig.ZOOKEEPER_CLUSTER).toString());
+                    values.forEach(result::set);
+                    break;
+            }
         }
 
         return result;
@@ -91,17 +122,33 @@ public class TapJsonConfig<T extends Map> implements TapConfig {
 
     @Override
     public Configuration getHBase(String instanceName) {
-        ArrayList<T> hbases = getServiceNodes(TAP_CONFIG_HBASE_TYPE);
-        T serviceNode = serviceNodeForInstance(hbases, instanceName);
+        ArrayList<T> hbase = getServiceNodes(TAP_CONFIG_HBASE_TYPE);
+        T serviceNode = serviceNodeForInstance(hbase, instanceName);
 
-        return createConfiguration(serviceNode);
+        return createConfiguration(serviceNode, TAP_CONFIG_HBASE_TYPE);
     }
 
     @Override
     public Configuration getHDFSConfig(String instanceName) {
-        ArrayList<T> hbases = getServiceNodes(TAP_CONFIG_HBASE_TYPE);
-        T serviceNode = serviceNodeForInstance(hbases, instanceName);
+        ArrayList<T> hdfs = getServiceNodes(TAP_CONFIG_HDFS_TYPE);
+        T serviceNode = serviceNodeForInstance(hdfs, instanceName);
 
-        return createConfiguration(serviceNode);
+        return createConfiguration(serviceNode, TAP_CONFIG_HDFS_TYPE);
+    }
+
+    @Override
+    public Configuration getKafkaConfig(String instanceName) {
+        ArrayList<T> kafka = getServiceNodes(TAP_CONFIG_KAFKA_TYPE);
+        T serviceNode = serviceNodeForInstance(kafka, instanceName);
+
+        return createConfiguration(serviceNode, TAP_CONFIG_KAFKA_TYPE);
+    }
+
+    @Override
+    public Configuration getZookeeperConfig(String instanceName) {
+        ArrayList<T> zookeeper = getServiceNodes(TAP_CONFIG_ZOOKEEPER_TYPE);
+        T serviceNode = serviceNodeForInstance(zookeeper, instanceName);
+
+        return createConfiguration(serviceNode, TAP_CONFIG_ZOOKEEPER_TYPE);
     }
 }
